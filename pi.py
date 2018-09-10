@@ -9,9 +9,9 @@ from bs4 import BeautifulSoup
 from humanfriendly import format_timespan, format_size, format_number, format_length
 import time, random, sys, json, codecs, threading, glob, re, string, os, requests, subprocess, six, ast, pytz, urllib.request, urllib.parse, urllib.error, urllib.parse
 from gtts import gTTS
-import html5lib,shutil
-import wikipedia,goslate
-import youtube_dl, pafy, asyncio
+#import html5lib,shutil
+#import wikipedia,goslate
+#import youtube_dl, pafy, asyncio
 from multiprocessing import Pool, Process
 from googletrans import Translator
 #==============================================================================#
@@ -23,9 +23,9 @@ line = LINE('')
 line.log("Auth Token : " + str(line.authToken))
 line.log("Timeline Token : " + str(line.tl.channelAccessToken))
 
-#ki = LINE()
-#ki.log("Auth Token : " + str(ki.authToken))
-#ki.log("Timeline Token : " + str(ki.tl.channelAccessToken))
+ki = LINE()
+ki.log("Auth Token : " + str(ki.authToken))
+ki.log("Timeline Token : " + str(ki.tl.channelAccessToken))
 
 #kk = LINE()
 #kk.log("Auth Token : " + str(kk.authToken))
@@ -44,6 +44,10 @@ lineMID = line.profile.mid
 lineProfile = line.getProfile()
 lineSettings = line.getSettings()
 
+kiMID = ki.profile.mid
+kiProfile = ki.getProfile()
+kiSettings = ki.getSettings()
+
 oepoll = OEPoll(line)
 #call = Call(line)
 readOpen = codecs.open("read.json","r","utf-8")
@@ -54,7 +58,7 @@ Rfu = [line]
 Exc = [line]
 lineMID = line.getProfile().mid
 bot1 = line.getProfile().mid
-RfuBot=[lineMID]
+RfuBot=[lineMID,kiMID]
 Family=["ufb6d6e2e1849c403d55f4ba3071985a2",lineMID]
 admin = "uufb6d6e2e1849c403d55f4ba3071985a2" 
 admin=['ufb6d6e2e1849c403d55f4ba3071985a2',lineMID]
@@ -84,7 +88,7 @@ settings = {
     "potoMention": True,
     "lang":"JP",
     "Wc": True,
-    #"Lv": False,
+    "Lv": False,
     "blacklist":{},
     "winvite": False,
     "wblacklist": False,
@@ -256,7 +260,7 @@ def sendMessageWithMention(to, lineMID):
         logError(error)
  
 def myhelp():
-    myHelp = """〘byphu 〙 
+    myHelp = """〘 ฟลุ๊ค 〙 
 🇹🇭คำสั่ง=คำสั่ง
 🇹🇭คำสั่ง2=คำสั่งเชล
 🇹🇭คำสั่ง3=คำสั่งกับแทค
@@ -265,7 +269,8 @@ def myhelp():
 🇹🇭คำสั่ง6=คำสั่งกลุ่ม
 🇹🇭คำสั่ง7=คำสั่งเลียนแบบ
 🇹🇭คำสั่ง8=คำสั่งล่องหน
-〘byphu 〙"""
+ THAILAND ฟลุ๊ค BOT LINE
+〘 ฟลุ๊ค 〙"""
     return myHelp
 
 def listgrup():
@@ -332,6 +337,10 @@ def helpset():
 🌪เปิดหมด
 🌪ปิดหมด
 🌪สปีด
+ คิกสปีด
+ คิก - เช็คชื่อคิก
+ มา - คิกเข้า
+ ออก - คิกออก
 🌪โทร
 🌪สแปม
 🌪รีบอท
@@ -672,7 +681,7 @@ def lineBot(op):
                     start = time.time()
                     line.sendMessage(msg.to,"ความเร็วอยู่ที่")
                     line.sendMessage(msg.to,str(int(round((time.time() - start) * 1000)))+" ms")
-                elif 'มาหำ' in text.lower():
+                elif 'มา' in text.lower():
                     if msg.toType == 2:
                         G = line.getGroup(to)
                         if G.preventedJoinByTicket == False:
@@ -694,7 +703,7 @@ def lineBot(op):
                             kc.acceptGroupInvitationByTicket(to, Ti)
                             G.preventedJoinByTicket = True
                             line.updateGroup(G)
-                elif text.lower() == 'ไป':
+                elif text.lower() == 'ออก':
                     if msg.toType == 2:
                         ginfo = line.getGroup(to)
                         try:
@@ -703,6 +712,32 @@ def lineBot(op):
                             kk.leaveGroup(to)
                         except:
                             pass
+                elif text.lower() == "คิก":
+                    if msg._from in Family:
+                        profile = ki.getProfile()
+                        text = profile.displayName + " รายงานตัวคับท่านยู"
+                        ki.sendMessage(to, text)                                
+                        profile = kk.getProfile()
+                        text = profile.displayName + " รายงานตัวคับท่านยู"
+                        kk.sendMessage(to, text)                                
+                        profile = kc.getProfile()
+                        text = profile.displayName + " รายงานตัวคับท่านยู"
+                        kc.sendMessage(to, text)
+                        profile = ke.getProfile()                        
+                        text = profile.displayName + " รายงานตัวคับท่านยู"
+                        ke.sendMessage(to, text)            
+                elif text.lower() == 'คิกสปีด':
+                    start = time.time()
+                    ki.sendMessage(to, "กำลังทดสอบ")
+                    elapsed_time = time.time() - start
+                    ki.sendMessage(msg.to, "[ %s Seconds ] [ " % (elapsed_time) + str(int(round((time.time() - start) * 1000)))+" ms ]")
+                    elapsed_time = time.time() - start
+                    kk.sendMessage(msg.to, "[ %s Seconds ] [ " % (elapsed_time) + str(int(round((time.time() - start) * 1000)))+" ms ]")
+                    elapsed_time = time.time() - start
+                    kc.sendMessage(msg.to, "[ %s Seconds ] [ " % (elapsed_time) + str(int(round((time.time() - start) * 1000)))+" ms ]")
+                    elapsed_time = time.time() - start
+                    ke.sendMessage(msg.to, "[ %s Seconds ] [ " % (elapsed_time) + str(int(round((time.time() - start) * 1000)))+" ms ]")
+                    elapsed_time = time.time() - start            
                 elif text.lower() == 'สปีด':
                     start = time.time()
                     line.sendMessage(to,"ความเร็วของบอท..")
