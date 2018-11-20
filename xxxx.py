@@ -22,9 +22,9 @@ ki = LINE('')
 ki.log("Auth Token : " + str(ki.authToken))
 ki.log("Timeline Token : " + str(ki.tl.channelAccessToken))
 
-#kk = LINE('')
-#kk.log("Auth Token : " + str(kk.authToken))
-#kk.log("Timeline Token : " + str(kk.tl.channelAccessToken))
+kk = LINE('')
+kk.log("Auth Token : " + str(kk.authToken))
+kk.log("Timeline Token : " + str(kk.tl.channelAccessToken))
 
 #kc = LINE('')
 #kc.log("Auth Token : " + str(kc.authToken))
@@ -42,9 +42,9 @@ kiMID = ki.profile.mid
 kiProfile = ki.getProfile()
 kiSettings = ki.getSettings()
 
-#kkMID = kk.profile.mid
-#kkProfile = kk.getProfile()
-#kkSettings = kk.getSettings()
+kkMID = kk.profile.mid
+kkProfile = kk.getProfile()
+kkSettings = kk.getSettings()
 
 #kcMID = kc.profile.mid
 #kcProfile = kc.getProfile()
@@ -53,7 +53,7 @@ kiSettings = ki.getSettings()
 
 
 #oepoll = OEPoll(kc)
-#oepoll = OEPoll(kk)
+oepoll = OEPoll(kk)
 oepoll = OEPoll(ki)
 oepoll = OEPoll(line)
 readOpen = codecs.open("read.json","r","utf-8")
@@ -63,10 +63,10 @@ settings = json.load(settingsOpen)
 Rfu = [line]
 lineMID = line.getProfile().mid
 kiMID = ki.getProfile().mid
-#kkMID = kk.getProfile().mid
+kkMID = kk.getProfile().mid
 #kcMID = kc.getProfile().mid
 bot1 = line.getProfile().mid
-RfuBot=[lineMID,kiMID]
+RfuBot=[lineMID,kiMID,kkMID]
 RfuBot=[lineMID]
 Family=["u37c6d68f4ec4fdbf43e4e70eb9b28e65",lineMID]
 admin=['u37c6d68f4ec4fdbf43e4e70eb9b28e65',lineMID]
