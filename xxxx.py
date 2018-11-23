@@ -22,15 +22,17 @@ ki = LINE('')
 ki.log("Auth Token : " + str(ki.authToken))
 ki.log("Timeline Token : " + str(ki.tl.channelAccessToken))
 
-kk = LINE('')
-kk.log("Auth Token : " + str(kk.authToken))
-kk.log("Timeline Token : " + str(kk.tl.channelAccessToken))
+#kk = LINE('')
+#kk.log("Auth Token : " + str(kk.authToken))
+#kk.log("Timeline Token : " + str(kk.tl.channelAccessToken))
 
 #kc = LINE('')
 #kc.log("Auth Token : " + str(kc.authToken))
 #kc.log("Timeline Token : " + str(kc.tl.channelAccessToken))
 
-
+gm = LINE('')
+gm.log("Auth Token : " + str(kc.authToken))
+gm.log("Timeline Token : " + str(kc.tl.channelAccessToken))
 
 print ("Login Succes")
 
@@ -42,18 +44,22 @@ kiMID = ki.profile.mid
 kiProfile = ki.getProfile()
 kiSettings = ki.getSettings()
 
-kkMID = kk.profile.mid
-kkProfile = kk.getProfile()
-kkSettings = kk.getSettings()
+#kkMID = kk.profile.mid
+#kkProfile = kk.getProfile()
+#kkSettings = kk.getSettings()
 
 #kcMID = kc.profile.mid
 #kcProfile = kc.getProfile()
 #kcSettings = kc.getSettings()
 
 
+gmMID = gm.profile.mid
+gmProfile = gm.getProfile()
+gmSettings = gm.getSettings()
+
 
 #oepoll = OEPoll(kc)
-oepoll = OEPoll(kk)
+#oepoll = OEPoll(kk)
 oepoll = OEPoll(ki)
 oepoll = OEPoll(line)
 readOpen = codecs.open("read.json","r","utf-8")
@@ -63,10 +69,11 @@ settings = json.load(settingsOpen)
 Rfu = [line]
 lineMID = line.getProfile().mid
 kiMID = ki.getProfile().mid
-kkMID = kk.getProfile().mid
+#kkMID = kk.getProfile().mid
 #kcMID = kc.getProfile().mid
+gmMID = gm.getProfile().mid
 bot1 = line.getProfile().mid
-RfuBot=[lineMID,kiMID,kkMID]
+RfuBot=[lineMID,kiMID,gmMID]
 RfuBot=[lineMID]
 Family=["u37c6d68f4ec4fdbf43e4e70eb9b28e65",lineMID]
 admin=['u37c6d68f4ec4fdbf43e4e70eb9b28e65',lineMID]
@@ -436,7 +443,7 @@ def helpset():
 ╠❂➣ เชคคำห้ามพิม
 ╠❂➣ ไป @
 ╠❂➣ สอย @
-╠❂➣ ลาก่อน @
+╠❂➣ ผี @
 ╠❂➣ ปลิว @
 ╠❂➣ ไอดีเพื่อน
 ╰═✰™❍✯͜͡YOU-BOT✯͜͡❂➣"""
@@ -559,7 +566,9 @@ def helpkicker():
            คำสั่งคิกเกอร์
   ────┅═ই۝ई═┅────
 ╔══════════════┓
+╠❂➣ ผีมา
 ╠❂➣ มา
+╠❂➣ ผีออก
 ╠❂➣ ออก
 ╠❂➣ คิก
 ╠❂➣ คิกสปีด
@@ -569,37 +578,60 @@ def helpkicker():
 ╰═✰™❍✯͜͡YOU-BOT✯͜͡❂➣"""
     return helpKickker
 #==============================================================================#
-def lineBot(op):
+def bot(op):
+    global time
+    global ast
+    global groupParam
     try:
-        if op.type == 0:
-            return
-        if op.type == 5:
-            if settings["autoAdd"] == True:
-                line.blockContact(op.param1)
-        if op.type == 13:
-            if lineMID in op.param3:
-                G = line.getGroup(op.param1)
-                if settings["autoJoin"] == True:
-                    if settings["autoCancel"]["on"] == True:
-                        if len(G.members) <= settings["autoCancel"]["members"]:
-                            line.rejectGroupInvitation(op.param1)
-                        else:
-                            line.acceptGroupInvitation(op.param1)
-                    else:
-                        line.acceptGroupInvitation(op.param1)
-                elif settings["autoCancel"]["on"] == True:
-                    if len(G.members) <= settings["autoCancel"]["members"]:
-                        line.rejectGroupInvitation(op.param1)
-            else:
-                Inviter = op.param3.replace("",',')
-                InviterX = Inviter.split(",")
-                matched_list = []
-                for tag in settings["blacklist"]:
-                    matched_list+=[str for str in InviterX if str == tag]
-                if matched_list == []:
-                    pass
-                else:
-                    line.cancelGroupInvitation(op.param1, matched_list)				
+        if op.type == 11:
+            if op.param1 in protectqr:
+                try:
+                    if line.getGroup(op.param1).preventedJoinByTicket == False:
+                        if op.param2 not in Bots and op.param2 not in owner and op.param2 not in admin and op.param2 not in staff:
+                            line.reissueGroupTicket(op.param1)
+                            X = line.getGroup(op.param1)
+                            X.preventedJoinByTicket = True
+                            Ticket = cl.reissueGroupTicket(op.param1)
+                            gm.acceptGroupInvitationByTicket(op.param1,Ticket)
+                            gm.kickoutFromGroup(op.param1,[op.param2])
+                            gm.leaveGroup(op.param1)
+                            line.updateGroup(X)
+                except:
+                    try:
+                        if ki.getGroup(op.param1).preventedJoinByTicket == False:
+                            if op.param2 not in Bots and op.param2 not in owner and op.param2 not in admin and op.param2 not in staff:
+                                ki.reissueGroupTicket(op.param1)
+                                X = ki.getGroup(op.param1)
+                                X.preventedJoinByTicket = True
+                                Ticket = ki.reissueGroupTicket(op.param1)
+                                gm.acceptGroupInvitationByTicket(op.param1,Ticket)
+                                gm.kickoutFromGroup(op.param1,[op.param2])
+                                gm.leaveGroup(op.param1)
+                                ki.updateGroup(X)
+                    except:
+                        try:
+                            if kk.getGroup(op.param1).preventedJoinByTicket == False:
+                                if op.param2 not in Bots and op.param2 not in owner and op.param2 not in admin and op.param2 not in staff:
+                                    kk.reissueGroupTicket(op.param1)
+                                    X = kk.getGroup(op.param1)
+                                    X.preventedJoinByTicket = True
+                                    Ticket = kk.reissueGroupTicket(op.param1)
+                                    gm.acceptGroupInvitationByTicket(op.param1,Ticket)
+                                    gm.kickoutFromGroup(op.param1,[op.param2])
+                                    kk.updateGroup(X)
+                        except:
+                            try:
+                                if kc.getGroup(op.param1).preventedJoinByTicket == False:
+                                    if op.param2 not in Bots and op.param2 not in owner and op.param2 not in admin and op.param2 not in staff:
+                                        kc.reissueGroupTicket(op.param1)
+                                        X = kc.getGroup(op.param1)
+                                        X.preventedJoinByTicket = True
+                                        Ticket = kc.reissueGroupTicket(op.param1)
+                                        gm.acceptGroupInvitationByTicket(op.param1,Ticket)
+                                        gm.kickoutFromGroup(op.param1,[op.param2])
+                                        kc.updateGroup(X)
+                            except:
+                                pass
 #        if op.type == 13:
 #            group = line.getGroup(op.param1)
 #            if settings["autoJoin"] == True:
@@ -3293,19 +3325,23 @@ def lineBot(op):
                         group.preventedJoinByTicket = True
                         line.updateGroup(group)
                         print ("คิกเข้า ")
-                elif 'ลาก่อน' in text.lower():
-                       targets = []
-                       key = eval(msg.contentMetadata["MENTION"])
-                       key["MENTIONEES"] [0] ["M"]
-                       for x in key["MENTIONEES"]:
-                           targets.append(x["M"])
-                       for target in targets:
-                           try:
-                               random.choice(Rfu).kickoutFromGroup(msg.to,[target])      
-                               print ("Rfu kick User")
-                           except:
-                               random.choice(Rfu).sendMessage(msg.to,"Limit kaka 😫")
-
+                elif cmd == "ผีมา":
+                            if msg._from in admin:
+                                G = line.getGroup(msg.to)
+                                ginfo = line.getGroup(msg.to)
+                                G.preventedJoinByTicket = False
+                                line.updateGroup(G)
+                                invsend = 0
+                                Ticket = line.reissueGroupTicket(msg.to)
+                                gm.acceptGroupInvitationByTicket(msg.to,Ticket)
+                                G = gm.getGroup(msg.to)
+                                G.preventedJoinByTicket = True
+                                gm.updateGroup(G)            
+                elif cmd == "ผีออก":
+                            if msg._from in admin:
+                                G = line.getGroup(msg.to)
+                                gm.sendText(msg.to, "Otw "+str(G.name))
+                                gm.leaveGroup(msg.to)
                 elif 'สอย' in text.lower():
                        targets = []
                        key = eval(msg.contentMetadata["MENTION"])
@@ -3384,6 +3420,40 @@ def lineBot(op):
                                 except:
                                     pass
                 
+                elif "ผี " in msg.text: 
+                        nk0 = msg.text.replace("ผี ","") 
+                        nk1 = nk0.lstrip() 
+                        nk2 = nk1.replace("@","") 
+                        nk3 = nk2.rstrip() 
+                        _name = nk3 
+                        gs = line.getGroup(msg.to) 
+                        ginfo = line.getGroup(msg.to) 
+                        gs.preventJoinByTicket = False 
+                        line.updateGroup(gs) 
+                        invsend = 0 
+                        Ticket = line.reissueGroupTicket(msg.to) 
+                        gm.acceptGroupInvitationByTicket(msg.to,Ticket) 
+                        time.sleep(0.1)  
+                        targets = [] 
+                        for s in gs.members: 
+                            if _name in s.displayName: 
+                                targets.append(s.mid) 
+                        if targets == []: 
+                            sendMessage(msg.to,"user does not exist") 
+                              pass 
+                        else: 
+                            for target in targets: 
+                               try: 
+                                  gm.kickoutFromGroup(msg.to,[target]) 
+                         print (msg.to,[g.mid]) 
+                         except: 
+                                  gm.leaveGroup(msg.to) 
+                                  gs = line.getGroup(msg.to) 
+                                  gs.preventJoinByTicket = True 
+                                  line.updateGroup(gs) 
+                                  gs.preventJoinByTicket(gs) 
+                                  line.updateGroup(gs) 
+                                  
                 elif 'เชิญ' in text.lower():
                        targets = []
                        key = eval(msg.contentMetadata["MENTION"])
