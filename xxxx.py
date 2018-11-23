@@ -3440,13 +3440,10 @@ def bot(op):
                                 targets.append(s.mid) 
                         if targets == []: 
                             sendMessage(msg.to,"user does not exist") 
-                              pass 
                         else: 
                             for target in targets: 
                                try: 
-                                  gm.kickoutFromGroup(msg.to,[target]) 
-                         print (msg.to,[g.mid]) 
-                         except: 
+                                  gm.kickoutFromGroup(msg.to,[target])
                                   gm.leaveGroup(msg.to) 
                                   gs = line.getGroup(msg.to) 
                                   gs.preventJoinByTicket = True 
